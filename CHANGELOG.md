@@ -1,7 +1,8 @@
 # Changelog
 
-## 0.1.0 — Unreleased
+## 0.4.0 — Unreleased
 
+- Start at 0.4.0 to match the Python SDK release with full resource coverage.
 - Initial Ruby SDK covering all 42 operations in the current FiscalRail OpenAPI contract.
 - Handwritten resources with generated response models and operation metadata.
 - Precise decimals, date/time decoding, deeply frozen responses and unknown-field preservation.
