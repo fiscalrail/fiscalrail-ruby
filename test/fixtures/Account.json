@@ -1,0 +1,47 @@
+{
+  "id": "acct_14Vxtqg2nwvPR75TpsGH8N",
+  "object": "account",
+  "live": true,
+  "name": "Example supplier",
+  "tax_id": {
+    "id": "tax_id_14Vxtqg2nwvPR75TpsGH8N",
+    "object": "tax_id",
+    "live": true,
+    "country": "ES",
+    "type": "es_nif",
+    "value": "B02850360",
+    "owner": {
+      "type": "account",
+      "id": "acct_14Vxtqg2nwvPR75TpsGH8N"
+    },
+    "verification": {
+      "status": "completed",
+      "valid": true,
+      "completed_at": "2026-08-09T10:24:00Z"
+    }
+  },
+  "email": "billing@example.com",
+  "phone": "+34910000000",
+  "address": {
+    "line_1": "Gran Via 1",
+    "line_2": null,
+    "city": "Madrid",
+    "postal_code": "28013",
+    "state": "Madrid",
+    "country": "ES"
+  },
+  "tax_regime": "es",
+  "timezone": "Europe/Madrid",
+  "invoice_locale": "es",
+  "invoice_numbering_scope": "account",
+  "default_series": {
+    "invoice": "inv_ser_14Vxtqg4QFd6rL8cUoK3sZ",
+    "credit_note": "inv_ser_14Vxtqj7HFs2pM9cXwL6eR",
+    "amendment": "inv_ser_14Vxtqk8JGt3qN2dYxM7fS"
+  },
+  "default_payment_instructions": [
+    "pay_ins_14Vxtqm9KHu4rP3eZyN8gT"
+  ],
+  "created_at": "2026-07-31T09:00:00Z",
+  "updated_at": "2026-07-31T09:00:00Z"
+}

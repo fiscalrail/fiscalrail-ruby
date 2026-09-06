@@ -1,0 +1,14 @@
+{
+  "object": "account_tax_regime",
+  "account": "acct_14Vxtqg2nwvPR75TpsGH8N",
+  "key": "es",
+  "es": {
+    "representation": {
+      "kind": "aeat_registered_power",
+      "power_code": "IZ860",
+      "status": "verified",
+      "verified_at": "2026-08-25T14:30:00Z",
+      "last_checked_at": "2026-08-25T14:30:00Z"
+    }
+  }
+}

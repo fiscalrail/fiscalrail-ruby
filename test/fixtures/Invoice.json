@@ -1,0 +1,137 @@
+{
+  "id": "inv_14Vxtqg6oXpAY5WdWoq4wW",
+  "object": "invoice",
+  "live": true,
+  "account": "acct_14Vxtqg2nwvPR75TpsGH8N",
+  "kind": "invoice",
+  "code": "INV-00001",
+  "series": "inv_ser_14Vxtqg4QFd6rL8cUoK3sZ",
+  "issue_date": "2026-07-31",
+  "supply_period": null,
+  "preceding_invoice": null,
+  "currency": "EUR",
+  "supplier": {
+    "source": {
+      "type": "account",
+      "id": "acct_14Vxtqg2nwvPR75TpsGH8N"
+    },
+    "name": "Example supplier",
+    "tax_id": {
+      "country": "ES",
+      "type": "es_nif",
+      "value": "B02850360"
+    },
+    "email": null,
+    "phone": null,
+    "address": {
+      "line_1": "Example street 1",
+      "line_2": null,
+      "city": "Madrid",
+      "postal_code": "28001",
+      "state": null,
+      "country": "ES"
+    }
+  },
+  "customer": {
+    "source": {
+      "type": "customer",
+      "id": "cus_14Vxtqg6oXpAY5WdWoq4wW"
+    },
+    "name": "Acme SL",
+    "tax_id": {
+      "country": "ES",
+      "type": "es_nif",
+      "value": "B87654323"
+    },
+    "email": "billing@example.com",
+    "phone": null,
+    "address": {
+      "line_1": "Gran Via 1",
+      "line_2": null,
+      "city": "Madrid",
+      "postal_code": "28013",
+      "state": "Madrid",
+      "country": "ES"
+    }
+  },
+  "payment_terms": {
+    "due_date": "2026-08-30",
+    "options": [
+      {
+        "payment_instruction": "pay_ins_14Vxtqm9KHu4rP3eZyN8gT",
+        "type": "bank_transfer",
+        "reference": "INV-00001",
+        "bank_transfer": {
+          "beneficiary": "Example supplier",
+          "iban": "ES9121000418450200051332",
+          "bic": "CAIXESBBXXX"
+        }
+      }
+    ]
+  },
+  "lines": [
+    {
+      "index": 1,
+      "description": "Consulting",
+      "quantity": "8.0",
+      "unit_price": "75.00",
+      "subtotal": "600.00",
+      "taxes": [
+        {
+          "tax": "vat",
+          "rule": "general",
+          "effect": "added",
+          "treatment": "taxable",
+          "description": "IVA 21%",
+          "rate": "21%",
+          "taxable_base": "600.00"
+        }
+      ]
+    }
+  ],
+  "tax_totals": [
+    {
+      "tax": "vat",
+      "rule": "general",
+      "effect": "added",
+      "treatment": "taxable",
+      "description": "IVA 21%",
+      "rate": "21%",
+      "taxable_base": "600.00",
+      "amount": "126.00"
+    }
+  ],
+  "totals": {
+    "subtotal": "600.00",
+    "tax": "126.00",
+    "total_with_tax": "726.00",
+    "withheld_tax": "0.00",
+    "payable": "726.00"
+  },
+  "created_at": "2026-07-31T09:30:00Z",
+  "amendments": [],
+  "tax_regime": {
+    "key": "es",
+    "es": {
+      "qr": {
+        "content": "https://prewww2.aeat.es/wlpl/TIKE-CONT/ValidarQR?nif=B02850360&numserie=INV-00001&fecha=31-07-2026&importe=726.00",
+        "image_url": "https://api.fiscalrail.com/v1/invoices/inv_14Vxtqg6oXpAY5WdWoq4wW/qr.svg?signature=example"
+      },
+      "verifactu": {
+        "registrations": [
+          {
+            "id": "es_inv_reg_14Vxtqg8mKp2Rs7Dc4Hn6Y",
+            "object": "verifactu_registration",
+            "live": true,
+            "invoice": "inv_14Vxtqg6oXpAY5WdWoq4wW",
+            "kind": "alta",
+            "status": "accepted",
+            "submitted_at": "2026-07-31T09:30:03Z",
+            "csv": "ABCD1234",
+            "error": null
+          }
+        ]
+      }
+    }
+  }
+}

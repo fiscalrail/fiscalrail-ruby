@@ -1,0 +1,11 @@
+{
+  "id": "inv_ser_14Vxtqg4QFd6rL8cUoK3sZ",
+  "object": "invoice_series",
+  "live": true,
+  "account": "acct_14Vxtqg2nwvPR75TpsGH8N",
+  "prefix": "INV",
+  "default_for": [
+    "invoice"
+  ],
+  "created_at": "2026-07-31T09:00:00Z"
+}

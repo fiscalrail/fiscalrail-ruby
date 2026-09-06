@@ -1,0 +1,14 @@
+{
+  "id": "dest_test",
+  "object": "event_destination",
+  "live": false,
+  "account": "acct_test",
+  "name": "Test webhook",
+  "type": "webhook",
+  "status": "enabled",
+  "enabled_events": ["invoice.issued"],
+  "webhook": { "url": "https://example.com/hook", "signing_secret": "whsec_test" },
+  "disabled_reason": null,
+  "created_at": "2026-09-06T10:00:00Z",
+  "updated_at": "2026-09-06T10:00:00Z"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "tax_id_14Vxtqg6oXpAY5WdWoq4wW",
+  "object": "tax_id",
+  "live": true,
+  "country": "ES",
+  "type": "es_nif",
+  "value": "B87654323",
+  "owner": {
+    "type": "customer",
+    "id": "cus_14Vxtqg6oXpAY5WdWoq4wW"
+  },
+  "verification": {
+    "status": "completed",
+    "valid": true,
+    "completed_at": "2026-08-09T10:24:00Z"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "inv_pdf_14Vxtqg6oXpAY5WdWoq4wW",
+  "object": "invoice_pdf",
+  "live": true,
+  "invoice": "inv_14Vxtqg6oXpAY5WdWoq4wW",
+  "status": "ready",
+  "locale": "es",
+  "rendered_at": "2026-07-31T09:31:00Z",
+  "url": "https://api.fiscalrail.com/invoice-pdfs/inv_pdf_14Vxtqg6oXpAY5WdWoq4wW?token=example",
+  "url_expires_at": "2026-08-30T09:31:00Z"
+}

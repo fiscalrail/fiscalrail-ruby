@@ -1,0 +1,11 @@
+{
+  "id": "evt_test",
+  "object": "event",
+  "live": false,
+  "account": "acct_test",
+  "type": "invoice.issued",
+  "occurred_at": "2026-09-06T10:00:00Z",
+  "actor": { "type": "api_key", "id": "key_test", "request_id": "req_origin" },
+  "related_object": { "id": "inv_test", "object": "invoice" },
+  "data": { "object": { "id": "inv_test", "object": "invoice", "future": true } }
+}

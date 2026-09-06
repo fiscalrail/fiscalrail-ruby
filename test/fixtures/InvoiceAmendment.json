@@ -1,0 +1,10 @@
+{
+  "id": "amd_test",
+  "object": "invoice_amendment",
+  "live": false,
+  "reason": "issued_by_mistake",
+  "original": { "id": "inv_test", "code": "TEST-00001", "issue_date": "2026-09-06" },
+  "credit_note": null,
+  "replacement": null,
+  "created_at": "2026-09-06T10:00:00Z"
+}

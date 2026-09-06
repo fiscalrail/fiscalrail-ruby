@@ -1,0 +1,32 @@
+{
+  "id": "cus_14Vxtqg6oXpAY5WdWoq4wW",
+  "object": "customer",
+  "live": true,
+  "name": "Acme SL",
+  "invoice_prefix": "ABCDEF",
+  "tax_id": {
+    "id": "tax_id_14Vxtqg6oXpAY5WdWoq4wW",
+    "object": "tax_id",
+    "live": true,
+    "country": "ES",
+    "type": "es_nif",
+    "value": "B87654323",
+    "owner": {
+      "type": "customer",
+      "id": "cus_14Vxtqg6oXpAY5WdWoq4wW"
+    },
+    "verification": null
+  },
+  "email": "billing@example.com",
+  "phone": "+34910000000",
+  "address": {
+    "line_1": "Gran Via 1",
+    "line_2": null,
+    "city": "Madrid",
+    "postal_code": "28013",
+    "state": "Madrid",
+    "country": "ES"
+  },
+  "created_at": "2026-07-31T09:30:00Z",
+  "updated_at": "2026-07-31T09:30:00Z"
+}

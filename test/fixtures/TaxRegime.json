@@ -1,0 +1,23 @@
+{
+  "id": "es",
+  "object": "tax_regime",
+  "taxes": [
+    {
+      "tax": "vat",
+      "name": "IVA",
+      "effect": "added",
+      "rules": [
+        {
+          "rule": "general",
+          "description": "IVA 21%",
+          "treatment": "taxable",
+          "rate": "21%",
+          "authority_code": null,
+          "legal_reference": "Ley 37/1992, artículo 90",
+          "effective_from": "2012-09-01",
+          "effective_until": null
+        }
+      ]
+    }
+  ]
+}

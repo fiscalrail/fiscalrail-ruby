@@ -1,0 +1,15 @@
+{
+  "id": "pay_ins_14Vxtqm9KHu4rP3eZyN8gT",
+  "object": "payment_instruction",
+  "live": true,
+  "account": "acct_14Vxtqg2nwvPR75TpsGH8N",
+  "label": "Main EUR account",
+  "type": "bank_transfer",
+  "bank_transfer": {
+    "beneficiary": "Example supplier",
+    "iban": "ES9121000418450200051332",
+    "bic": "CAIXESBBXXX"
+  },
+  "created_at": "2026-07-31T09:00:00Z",
+  "updated_at": "2026-07-31T09:00:00Z"
+}
