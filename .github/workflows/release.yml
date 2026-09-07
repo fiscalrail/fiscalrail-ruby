@@ -1,0 +1,55 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: rubygems-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["3.3", "3.4", "4.0"]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+          bundler-cache: true
+      - name: Verify release tag matches gem version
+        run: |
+          ruby -Ilib -rfiscalrail/version -e 'abort "Release tag must match v#{FiscalRail::VERSION}" unless ENV.fetch("GITHUB_REF_NAME") == "v#{FiscalRail::VERSION}"'
+      - run: bundle exec rake test build
+
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    environment:
+      name: release
+      url: https://rubygems.org/gems/fiscalrail
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: ruby/setup-ruby@95ef2b042f9d7a56d8268cba8559e2842e2ad01b # v1
+        with:
+          ruby-version: "4.0"
+          bundler-cache: true
+      - run: bundle exec rake check_generated build
+      - name: Authenticate to RubyGems with Trusted Publishing
+        uses: rubygems/configure-rubygems-credentials@dc5a8d8553e6ee01fc26761a49e99e733d17954a # v2.1.0
+      - name: Publish the tagged gem
+        run: gem push "fiscalrail-${GITHUB_REF_NAME#v}.gem"

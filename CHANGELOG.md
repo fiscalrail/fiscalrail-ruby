@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0 — Unreleased
+## 0.4.0 — 2026-09-07
 
 - Start at 0.4.0 to match the Python SDK release with full resource coverage.
 - Initial Ruby SDK covering all 42 operations in the current FiscalRail OpenAPI contract.

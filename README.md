@@ -2,10 +2,10 @@
 
 A Ruby client for issuing immutable invoices through FiscalRail. Ruby 3.3 or later; no Rails dependency.
 
-This is the initial, unpublished gem. To use the checkout with Bundler:
+Install with Bundler:
 
 ```ruby
-gem "fiscalrail", path: "../fiscalrail-sdks/ruby"
+gem "fiscalrail", "~> 0.4.0"
 ```
 
 ## Issue an invoice
