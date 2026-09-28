@@ -19,15 +19,6 @@ module FiscalRail
           "format": "date-time",
           "type": "string"
         },
-        "default_payment_instructions": {
-          "items": {
-            "$ref": "#/components/schemas/PaymentInstructionId"
-          },
-          "type": "array"
-        },
-        "default_series": {
-          "$ref": "#/components/schemas/AccountDefaultSeries"
-        },
         "email": {
           "type": [
             "string",
@@ -36,12 +27,6 @@ module FiscalRail
         },
         "id": {
           "$ref": "#/components/schemas/AccountId"
-        },
-        "invoice_locale": {
-          "type": "string"
-        },
-        "invoice_numbering_scope": {
-          "$ref": "#/components/schemas/AccountInvoiceNumberingScope"
         },
         "live": {
           "$ref": "#/components/schemas/Live"
@@ -84,10 +69,6 @@ module FiscalRail
         "address",
         "tax_regime",
         "timezone",
-        "invoice_locale",
-        "invoice_numbering_scope",
-        "default_series",
-        "default_payment_instructions",
         "created_at",
         "updated_at"
       ],
@@ -133,28 +114,70 @@ module FiscalRail
     "AccountInvoiceNumberingScope": {
       "type": "string"
     },
-    "AccountList": {
-      "model": "AccountList",
+    "AccountInvoicing": {
+      "model": "AccountInvoicing",
       "properties": {
-        "data": {
+        "default_payment_instructions": {
           "items": {
-            "$ref": "#/components/schemas/Account"
+            "$ref": "#/components/schemas/PaymentInstructionId"
           },
           "type": "array"
         },
-        "has_more": {
-          "type": "boolean"
+        "default_series": {
+          "$ref": "#/components/schemas/AccountDefaultSeries"
+        },
+        "footer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "locale": {
+          "type": "string"
+        },
+        "numbering_scope": {
+          "$ref": "#/components/schemas/AccountInvoiceNumberingScope"
         },
         "object": {
-          "const": "list",
+          "const": "account_invoicing",
           "type": "string"
         }
       },
       "required": [
         "object",
-        "has_more",
-        "data"
+        "locale",
+        "footer",
+        "numbering_scope",
+        "default_series",
+        "default_payment_instructions"
       ],
+      "type": "object"
+    },
+    "AccountInvoicingUpdate": {
+      "model": "AccountInvoicingUpdate",
+      "properties": {
+        "default_payment_instructions": {
+          "items": {
+            "$ref": "#/components/schemas/PaymentInstructionId"
+          },
+          "type": "array"
+        },
+        "default_series": {
+          "$ref": "#/components/schemas/AccountDefaultSeries"
+        },
+        "footer": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "locale": {
+          "type": "string"
+        },
+        "numbering_scope": {
+          "$ref": "#/components/schemas/AccountInvoiceNumberingScope"
+        }
+      },
       "type": "object"
     },
     "AccountNotConfiguredErrorResponse": {
@@ -206,17 +229,20 @@ module FiscalRail
         "address": {
           "$ref": "#/components/schemas/AddressUpdate"
         },
-        "default_payment_instructions": {
-          "items": {
-            "$ref": "#/components/schemas/PaymentInstructionId"
-          },
-          "type": "array"
+        "email": {
+          "type": [
+            "string",
+            "null"
+          ]
         },
-        "default_series": {
-          "$ref": "#/components/schemas/AccountDefaultSeries"
+        "name": {
+          "type": "string"
         },
-        "invoice_numbering_scope": {
-          "$ref": "#/components/schemas/AccountInvoiceNumberingScope"
+        "phone": {
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "type": "object"
@@ -3056,16 +3082,6 @@ module FiscalRail
         }
       }
     },
-    "listAccounts": {
-      "method": "GET",
-      "path": "/accounts",
-      "parameters": [],
-      "responses": {
-        "200": {
-          "$ref": "#/components/schemas/AccountList"
-        }
-      }
-    },
     "listApiKeys": {
       "method": "GET",
       "path": "/api-keys",
@@ -3290,30 +3306,28 @@ module FiscalRail
     },
     "retrieveAccount": {
       "method": "GET",
-      "path": "/accounts/{id}",
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "required": true
-        }
-      ],
+      "path": "/account",
+      "parameters": [],
       "responses": {
         "200": {
           "$ref": "#/components/schemas/Account"
         }
       }
     },
+    "retrieveAccountInvoicing": {
+      "method": "GET",
+      "path": "/account/invoicing",
+      "parameters": [],
+      "responses": {
+        "200": {
+          "$ref": "#/components/schemas/AccountInvoicing"
+        }
+      }
+    },
     "retrieveAccountTaxRegime": {
       "method": "GET",
-      "path": "/accounts/{account_id}/tax-regime",
-      "parameters": [
-        {
-          "name": "account_id",
-          "in": "path",
-          "required": true
-        }
-      ],
+      "path": "/account/tax-regime",
+      "parameters": [],
       "responses": {
         "200": {
           "$ref": "#/components/schemas/AccountTaxRegime"
@@ -3338,14 +3352,8 @@ module FiscalRail
     },
     "retrieveBalance": {
       "method": "GET",
-      "path": "/accounts/{account_id}/balance",
-      "parameters": [
-        {
-          "name": "account_id",
-          "in": "path",
-          "required": true
-        }
-      ],
+      "path": "/account/balance",
+      "parameters": [],
       "responses": {
         "200": {
           "$ref": "#/components/schemas/Balance"
@@ -3466,7 +3474,7 @@ module FiscalRail
     },
     "retrieveTaxId": {
       "method": "GET",
-      "path": "/tax_ids/{id}",
+      "path": "/tax-ids/{id}",
       "parameters": [
         {
           "name": "id",
@@ -3498,17 +3506,21 @@ module FiscalRail
     },
     "updateAccount": {
       "method": "PATCH",
-      "path": "/accounts/{id}",
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "required": true
-        }
-      ],
+      "path": "/account",
+      "parameters": [],
       "responses": {
         "200": {
           "$ref": "#/components/schemas/Account"
+        }
+      }
+    },
+    "updateAccountInvoicing": {
+      "method": "PATCH",
+      "path": "/account/invoicing",
+      "parameters": [],
+      "responses": {
+        "200": {
+          "$ref": "#/components/schemas/AccountInvoicing"
         }
       }
     },

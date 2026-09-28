@@ -2,7 +2,7 @@
 
 module FiscalRail
   class Client
-    attr_reader :accounts, :balances, :account_tax_regimes, :api_keys, :customers,
+    attr_reader :accounts, :account_invoicing, :balances, :account_tax_regimes, :api_keys, :customers,
       :event_destinations, :events, :invoice_series, :invoices, :invoice_pdfs,
       :payment_instructions, :tax_ids, :tax_regimes
 
@@ -20,6 +20,7 @@ module FiscalRail
       @adapter = adapter || NetHTTPAdapter.new(open_timeout: open_timeout, read_timeout: read_timeout, write_timeout: write_timeout)
       transport = Transport.new(api_key: api_key, base_url: base_url, max_retries: max_retries, adapter: @adapter)
       @accounts = Resources::Accounts.new(transport)
+      @account_invoicing = Resources::AccountInvoicing.new(transport)
       @balances = Resources::Balances.new(transport)
       @account_tax_regimes = Resources::AccountTaxRegimes.new(transport)
       @api_keys = Resources::ApiKeys.new(transport)

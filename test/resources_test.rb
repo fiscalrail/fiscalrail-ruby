@@ -5,11 +5,12 @@ require_relative "test_helper"
 class ResourcesTest < SDKTest
   # The expected wire methods and paths are independent of the generated registry.
   CASES = [
-    [:accounts, :list, [], {}, "GET", "/accounts", "Account", true],
-    [:accounts, :retrieve, ["acct_1"], {}, "GET", "/accounts/acct_1", "Account"],
-    [:accounts, :update, ["acct_1"], { default_payment_instructions: [] }, "PATCH", "/accounts/acct_1", "Account"],
-    [:balances, :retrieve, ["acct_1"], {}, "GET", "/accounts/acct_1/balance", "Balance"],
-    [:account_tax_regimes, :retrieve, ["acct_1"], {}, "GET", "/accounts/acct_1/tax-regime", "SpanishAccountTaxRegime"],
+    [:accounts, :retrieve, [], {}, "GET", "/account", "Account"],
+    [:accounts, :update, [], { name: "Next" }, "PATCH", "/account", "Account"],
+    [:account_invoicing, :retrieve, [], {}, "GET", "/account/invoicing", "AccountInvoicing"],
+    [:account_invoicing, :update, [], { numbering_scope: "customer" }, "PATCH", "/account/invoicing", "AccountInvoicing"],
+    [:balances, :retrieve, [], {}, "GET", "/account/balance", "Balance"],
+    [:account_tax_regimes, :retrieve, [], {}, "GET", "/account/tax-regime", "SpanishAccountTaxRegime"],
     [:api_keys, :list, [], {}, "GET", "/api-keys", "ApiKey", true],
     [:api_keys, :create, [], { name: "Test" }, "POST", "/api-keys", "ApiKey"],
     [:api_keys, :retrieve, ["key_1"], {}, "GET", "/api-keys/key_1", "ApiKey"],
@@ -35,7 +36,7 @@ class ResourcesTest < SDKTest
     [:invoices, :amend, ["inv_1"], { reason: "issued_by_mistake" }, "POST", "/invoices/inv_1/amendments", "InvoiceAmendment"],
     [:invoice_pdfs, :retrieve, ["inv_1"], {}, "GET", "/invoices/inv_1/pdf", "InvoicePdf"],
     [:invoice_pdfs, :render, ["inv_1"], {}, "POST", "/invoices/inv_1/pdf", "InvoicePdf"],
-    [:tax_ids, :retrieve, ["tax_1"], {}, "GET", "/tax_ids/tax_1", "TaxId"],
+    [:tax_ids, :retrieve, ["tax_1"], {}, "GET", "/tax-ids/tax_1", "TaxId"],
     [:tax_regimes, :list, [], {}, "GET", "/tax-regimes", "TaxRegime", true],
     [:tax_regimes, :retrieve, ["es"], {}, "GET", "/tax-regimes/es", "TaxRegime"],
     [:events, :list, [], {}, "GET", "/events", "Event", true],

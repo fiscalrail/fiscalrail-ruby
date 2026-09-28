@@ -41,8 +41,8 @@ class RubySDKIntegrationTest < ApiIntegrationTest
     payment = sdk.payment_instructions.create(label: "Example bank", type: "bank_transfer", bank_transfer: {
       beneficiary: "Ruby SDK verification", iban: "ES9121000418450200051332", bic: "CAIXESBBXXX"
     })
-    sdk.accounts.update(account.id, default_payment_instructions: [payment.id])
-    assert_equal "es", sdk.account_tax_regimes.retrieve(account.id).key
+    sdk.account_invoicing.update(default_payment_instructions: [payment.id])
+    assert_equal "es", sdk.account_tax_regimes.retrieve.key
     key = SecureRandom.uuid
     params = {
       customer: customer.id,

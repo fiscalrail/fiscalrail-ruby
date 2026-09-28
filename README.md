@@ -5,7 +5,7 @@ A Ruby client for issuing immutable invoices through FiscalRail. Ruby 3.3 or lat
 Install with Bundler:
 
 ```ruby
-gem "fiscalrail", "~> 0.4.0"
+gem "fiscalrail", "~> 0.5.0"
 ```
 
 ## Issue an invoice
@@ -83,9 +83,10 @@ By default, the SDK makes at most two retries for connection failures, timeouts,
 
 | Resource | Methods |
 | --- | --- |
-| `accounts` | `list`, `retrieve`, `update` |
-| `balances` | `retrieve(account_id)` |
-| `account_tax_regimes` | `retrieve(account_id)` |
+| `accounts` | `retrieve`, `update` |
+| `account_invoicing` | `retrieve`, `update` |
+| `balances` | `retrieve` |
+| `account_tax_regimes` | `retrieve` |
 | `api_keys` | `list`, `create`, `retrieve`, `delete` |
 | `customers` | `list`, `create`, `retrieve`, `update`, `delete` |
 | `event_destinations` | `list`, `create`, `retrieve`, `update`, `delete`, `enable`, `disable` |
@@ -114,7 +115,7 @@ end
 first_ten = client.customers.auto_paging_each.lazy.take(10).to_a
 ```
 
-Automatic iteration proceeds forward and preserves filters. Use `list(starting_after: ...)` or `list(ending_before: ...)` to manage cursors yourself. Accounts and tax regimes return single lists and do not expose automatic pagination.
+Automatic iteration proceeds forward and preserves filters. Use `list(starting_after: ...)` or `list(ending_before: ...)` to manage cursors yourself. Account, account invoicing, balance, and account tax regime resources return single objects.
 
 ## Payment instructions
 
@@ -129,7 +130,7 @@ instruction = client.payment_instructions.create(
   }
 )
 
-client.accounts.update("acct_...", default_payment_instructions: [instruction.id])
+client.account_invoicing.update(default_payment_instructions: [instruction.id])
 
 invoice = client.invoices.issue(
   payment_terms: { due_date: Date.new(2026, 9, 30) },
@@ -182,7 +183,7 @@ FiscalRail::Client.open(
   write_timeout: 30,
   max_retries: 2
 ) do |client|
-  client.accounts.list
+  client.accounts.retrieve
 end
 ```
 
