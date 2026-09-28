@@ -1,0 +1,14 @@
+{
+  "object": "account_invoicing",
+  "locale": "es",
+  "footer": null,
+  "numbering_scope": "account",
+  "default_series": {
+    "invoice": "inv_ser_14Vxtqg4QFd6rL8cUoK3sZ",
+    "credit_note": "inv_ser_14Vxtqj7HFs2pM9cXwL6eR",
+    "amendment": "inv_ser_14Vxtqk8JGt3qN2dYxM7fS"
+  },
+  "default_payment_instructions": [
+    "pay_ins_14Vxtqm9KHu4rP3eZyN8gT"
+  ]
+}

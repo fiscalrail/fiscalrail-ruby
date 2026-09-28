@@ -3,28 +3,34 @@
 module FiscalRail
   module Resources
     class Accounts < Resource
-      def list
-        request("listAccounts", retry_safe: true)
+      def retrieve
+        request("retrieveAccount", retry_safe: true)
       end
 
-      def retrieve(account_id)
-        request("retrieveAccount", path: { id: account_id }, retry_safe: true)
+      def update(**params)
+        request("updateAccount", body: params)
+      end
+    end
+
+    class AccountInvoicing < Resource
+      def retrieve
+        request("retrieveAccountInvoicing", retry_safe: true)
       end
 
-      def update(account_id, **params)
-        request("updateAccount", path: { id: account_id }, body: params)
+      def update(**params)
+        request("updateAccountInvoicing", body: params)
       end
     end
 
     class Balances < Resource
-      def retrieve(account_id)
-        request("retrieveBalance", path: { account_id: account_id }, retry_safe: true)
+      def retrieve
+        request("retrieveBalance", retry_safe: true)
       end
     end
 
     class AccountTaxRegimes < Resource
-      def retrieve(account_id)
-        request("retrieveAccountTaxRegime", path: { account_id: account_id }, retry_safe: true)
+      def retrieve
+        request("retrieveAccountTaxRegime", retry_safe: true)
       end
     end
   end

@@ -6,12 +6,8 @@ module FiscalRail
     class Account < Model
       def address = self["address"]
       def created_at = self["created_at"]
-      def default_payment_instructions = self["default_payment_instructions"]
-      def default_series = self["default_series"]
       def email = self["email"]
       def id = self["id"]
-      def invoice_locale = self["invoice_locale"]
-      def invoice_numbering_scope = self["invoice_numbering_scope"]
       def live = self["live"]
       def name = self["name"]
       def object = self["object"]
@@ -28,10 +24,21 @@ module FiscalRail
       def invoice = self["invoice"]
     end
 
-    class AccountList < Page
-      def data = self["data"]
-      def has_more = self["has_more"]
+    class AccountInvoicing < Model
+      def default_payment_instructions = self["default_payment_instructions"]
+      def default_series = self["default_series"]
+      def footer = self["footer"]
+      def locale = self["locale"]
+      def numbering_scope = self["numbering_scope"]
       def object = self["object"]
+    end
+
+    class AccountInvoicingUpdate < Model
+      def default_payment_instructions = self["default_payment_instructions"]
+      def default_series = self["default_series"]
+      def footer = self["footer"]
+      def locale = self["locale"]
+      def numbering_scope = self["numbering_scope"]
     end
 
     class AccountNotConfiguredError < Model
@@ -45,9 +52,9 @@ module FiscalRail
 
     class AccountUpdate < Model
       def address = self["address"]
-      def default_payment_instructions = self["default_payment_instructions"]
-      def default_series = self["default_series"]
-      def invoice_numbering_scope = self["invoice_numbering_scope"]
+      def email = self["email"]
+      def name = self["name"]
+      def phone = self["phone"]
     end
 
     class Address < Model

@@ -107,17 +107,17 @@ class TransportTest < SDKTest
     assert_match(/req_test/, error.message)
     [[], { "error" => nil }, { "error" => "unexpected" }].each do |payload|
       sdk = client { response(payload, status: 502) }
-      error = assert_raises(FiscalRail::APIError) { sdk.accounts.list }
+      error = assert_raises(FiscalRail::APIError) { sdk.accounts.retrieve }
       assert_equal payload, error.body
     end
     sdk = client { FiscalRail::NetHTTPAdapter::Response.new(status: 502, headers: {}, body: "bad gateway") }
-    error = assert_raises(FiscalRail::APIError) { sdk.accounts.list }
+    error = assert_raises(FiscalRail::APIError) { sdk.accounts.retrieve }
     assert_equal "bad gateway", error.body
   end
 
   def test_redirects_are_not_followed_and_bad_success_bodies_are_not_retried
     sdk = client { response({}, status: 302, headers: { "Location" => "https://elsewhere.test" }) }
-    assert_raises(FiscalRail::APIError) { sdk.accounts.list }
+    assert_raises(FiscalRail::APIError) { sdk.accounts.retrieve }
     assert_equal 1, @adapter.requests.size
     sdk = client(max_retries: 2) { FiscalRail::NetHTTPAdapter::Response.new(status: 201, headers: { "request-id" => "req_bad" }, body: "<html>bad</html>") }
     error = assert_raises(FiscalRail::ResponseParseError) { sdk.invoices.issue(idempotency_key: "durable", lines: []) }
