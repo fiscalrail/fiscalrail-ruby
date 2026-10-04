@@ -593,6 +593,15 @@ module FiscalRail
       def verified_at = self["verified_at"]
     end
 
+    class SpanishAccountSubmission < Model
+      def certificate_expires_at = self["certificate_expires_at"]
+      def error_code = self["error_code"]
+      def kind = self["kind"]
+      def last_checked_at = self["last_checked_at"]
+      def ready = self["ready"]
+      def status = self["status"]
+    end
+
     class SpanishAccountTaxRegime < Model
       def account = self["account"]
       def es = self["es"]
@@ -601,7 +610,9 @@ module FiscalRail
     end
 
     class SpanishAccountTaxRegimeDetails < Model
+      def pending_submission = self["pending_submission"]
       def representation = self["representation"]
+      def submission = self["submission"]
     end
 
     class SpanishInvoiceQr < Model
@@ -617,6 +628,29 @@ module FiscalRail
     class SpanishInvoiceTaxRegimeDetails < Model
       def qr = self["qr"]
       def verifactu = self["verifactu"]
+    end
+
+    class SpanishPendingSubmission < Model
+      def certificate_expires_at = self["certificate_expires_at"]
+      def error_code = self["error_code"]
+      def kind = self["kind"]
+      def last_checked_at = self["last_checked_at"]
+      def status = self["status"]
+    end
+
+    class SubmissionConfigurationError < Model
+      def code = self["code"]
+      def details = self["details"]
+      def message = self["message"]
+    end
+
+    class SubmissionConfigurationErrorResponse < Model
+      def error = self["error"]
+    end
+
+    class SubmissionConfigurationValidationDetail < Model
+      def field = self["field"]
+      def message = self["message"]
     end
 
     class TaxId < Model

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative "test_helper"
+require "stringio"
 
 class ResourcesTest < SDKTest
   # The expected wire methods and paths are independent of the generated registry.
@@ -11,6 +12,10 @@ class ResourcesTest < SDKTest
     [:account_invoicing, :update, [], { numbering_scope: "customer" }, "PATCH", "/account/invoicing", "AccountInvoicing"],
     [:balances, :retrieve, [], {}, "GET", "/account/balance", "Balance"],
     [:account_tax_regimes, :retrieve, [], {}, "GET", "/account/tax-regime", "SpanishAccountTaxRegime"],
+    ["account_tax_regimes.es", :upload_certificate, [], { certificate_file: StringIO.new("binary") }, "POST", "/account/tax-regime/es/certificate", "SpanishAccountTaxRegime"],
+    ["account_tax_regimes.es", :verify_representation, [], {}, "POST", "/account/tax-regime/es/representation/verify", "SpanishAccountTaxRegime"],
+    ["account_tax_regimes.es", :verify_submission, [], {}, "POST", "/account/tax-regime/es/submission/verify", "SpanishAccountTaxRegime"],
+    ["account_tax_regimes.es", :cancel_submission_change, [], {}, "DELETE", "/account/tax-regime/es/submission/pending", "SpanishAccountTaxRegime"],
     [:api_keys, :list, [], {}, "GET", "/api-keys", "ApiKey", true],
     [:api_keys, :create, [], { name: "Test" }, "POST", "/api-keys", "ApiKey"],
     [:api_keys, :retrieve, ["key_1"], {}, "GET", "/api-keys/key_1", "ApiKey"],
@@ -64,12 +69,12 @@ class ResourcesTest < SDKTest
       sdk = client do |req|
         assert_equal method, req[:method], "#{resource}.#{action}"
         assert_equal "/v1#{path}", req[:uri].path
-        if !kwargs.empty? && %w[POST PATCH].include?(method)
+        if !kwargs.empty? && %w[POST PATCH].include?(method) && action != :upload_certificate
           assert_equal FiscalRail::Serialization.json_value(kwargs), JSON.parse(req[:body])
         end
         response(payload, status: status)
       end
-      result = sdk.public_send(resource).public_send(action, *args, **kwargs)
+      result = resource.to_s.split(".").reduce(sdk) { |object, name| object.public_send(name) }.public_send(action, *args, **kwargs)
       if model
         actual = is_page ? result.first : result
         assert_instance_of FiscalRail::Models.const_get(model), actual
@@ -79,6 +84,38 @@ class ResourcesTest < SDKTest
       end
     end
     assert_equal FiscalRail::Generated::OPERATIONS.keys.sort, covered.sort
+  end
+
+  def test_multipart_preserves_binary_password_and_response_metadata
+    content = "\x00\xffPKCS12\r\n".b
+    file = StringIO.new(content)
+    sdk = client do |req|
+      assert_equal "POST", req[:method]
+      assert_equal "/v1/account/tax-regime/es/certificate", req[:uri].path
+      boundary = req[:headers].fetch("Content-Type").split("boundary=").last
+      assert_includes req[:body], content
+      assert_includes req[:body], "name=\"certificate_password\"\r\n\r\n@secret;é\r\n".b
+      assert req[:body].end_with?("--#{boundary}--\r\n")
+      payload = fixture("SpanishAccountTaxRegime")
+      payload["es"]["pending_submission"] = { "kind" => "direct", "status" => "pending_verification", "error_code" => nil, "last_checked_at" => nil, "certificate_expires_at" => "2027-10-01T00:00:00Z" }
+      response(payload, status: 202)
+    end
+    result = sdk.account_tax_regimes.es.upload_certificate(certificate_file: file, certificate_password: "@secret;é")
+    refute file.closed?
+    assert_equal "req_test", result.request_id
+    assert_equal "pending_verification", result.es.pending_submission.status
+    assert result.es.submission.ready
+  end
+
+  def test_upload_without_password_does_not_retry
+    sdk = client(max_retries: 2) do |req|
+      refute_includes req[:body], "certificate_password"
+      response({ error: { code: "unavailable", message: "Unavailable" } }, status: 503)
+    end
+    assert_raises(FiscalRail::APIError) do
+      sdk.account_tax_regimes.es.upload_certificate(certificate_file: StringIO.new("cert"))
+    end
+    assert_equal 1, @adapter.requests.length
   end
 
   def test_pagination_is_lazy_and_preserves_filters

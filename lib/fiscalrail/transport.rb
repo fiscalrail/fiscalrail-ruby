@@ -4,6 +4,7 @@ require "net/http"
 require "json"
 require "uri"
 require "thread"
+require "securerandom"
 
 module FiscalRail
   # The adapter boundary also makes custom proxy/TLS/instrumentation possible.
@@ -63,7 +64,7 @@ module FiscalRail
       @api_key, @base_url, @max_retries, @adapter, @sleeper = api_key, base_url.sub(%r{/+\z}, ""), max_retries, adapter, sleeper
     end
 
-    def request(method:, path:, body: nil, params: {}, headers: {}, retry_safe:, idempotency_key: nil)
+    def request(method:, path:, body: nil, multipart: nil, params: {}, headers: {}, retry_safe:, idempotency_key: nil)
       uri = URI("#{@base_url}#{path}")
       query = Serialization.json_value(params.reject { |_, value| value.nil? })
       uri.query = URI.encode_www_form(query) unless query.empty?
@@ -74,6 +75,17 @@ module FiscalRail
       request_headers["Idempotency-Key"] = idempotency_key if idempotency_key
       request_headers["Content-Type"] = "application/json" unless body.nil?
       encoded = body.nil? ? nil : JSON.generate(Serialization.json_value(body))
+      if multipart
+        boundary = "fiscalrail-#{SecureRandom.hex(24)}"
+        request_headers["Content-Type"] = "multipart/form-data; boundary=#{boundary}"
+        encoded = "--#{boundary}\r\nContent-Disposition: form-data; name=\"certificate_file\"; filename=\"certificate.p12\"\r\nContent-Type: application/x-pkcs12\r\n\r\n".b
+        encoded << multipart.fetch(:certificate_file).b << "\r\n".b
+        unless multipart[:certificate_password].nil?
+          encoded << "--#{boundary}\r\nContent-Disposition: form-data; name=\"certificate_password\"\r\n\r\n".b
+          encoded << multipart.fetch(:certificate_password).b << "\r\n".b
+        end
+        encoded << "--#{boundary}--\r\n".b
+      end
       attempt = 0
       loop do
         begin
