@@ -9,6 +9,15 @@
       "status": "verified",
       "verified_at": "2026-08-25T14:30:00Z",
       "last_checked_at": "2026-08-25T14:30:00Z"
-    }
+    },
+    "submission": {
+      "kind": "represented",
+      "ready": true,
+      "status": "verified",
+      "error_code": null,
+      "last_checked_at": "2026-09-07T10:00:00Z",
+      "certificate_expires_at": null
+    },
+    "pending_submission": null
   }
 }

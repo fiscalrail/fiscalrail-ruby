@@ -5,7 +5,7 @@ A Ruby client for issuing immutable invoices through FiscalRail. Ruby 3.3 or lat
 Install with Bundler:
 
 ```ruby
-gem "fiscalrail", "~> 0.5.0"
+gem "fiscalrail", "~> 0.6.0"
 ```
 
 ## Issue an invoice
@@ -230,3 +230,32 @@ FISCALRAIL_APP_ROOT="$PWD" bundle exec ruby /absolute/path/to/ruby/test/rails_in
 It creates a Test account inside a test transaction and checks customer creation, null clearing, payment defaults, issuance/replay, pagination, PDF download and amendment. Set `FISCALRAIL_SDK_PDF=/tmp/sdk-invoice.pdf` to retain the rendered PDF for inspection. This test is optional and is not part of the standalone gem CI.
 
 See [RELEASING.md](RELEASING.md) for the release checklist.
+
+
+## Spanish AEAT submission
+
+Use a Live Spanish account key. Upload a `.p12`/`.pfx` file (up to 128 KiB),
+including its private key, using native multipart upload. Omit the password for
+an unprotected bundle. The certificate's issuer NIF must match the account.
+
+```ruby
+File.open("issuer.p12", "rb") do |certificate|
+  setup = client.account_tax_regimes.es.upload_certificate(
+    certificate_file: certificate,
+    certificate_password: ENV.fetch("CERTIFICATE_PASSWORD")
+  )
+end
+setup = client.account_tax_regimes.retrieve
+# Inspect setup.es.pending_submission.status / error_code and setup.es.submission.ready.
+client.account_tax_regimes.es.verify_submission # retry the pending or active check
+client.account_tax_regimes.es.cancel_submission_change
+client.account_tax_regimes.es.verify_representation # after granting AEAT authority
+```
+
+Each mutation above is a separate operation; choose the one needed. Upload and
+verification return the account setup while AEAT checks run asynchronously.
+Poll the generic account tax-regime resource for pending verification status,
+error code and the active setup's readiness. A working setup remains active until
+a replacement verifies; failed checks retain the pending certificate for retry.
+Cancelling removes only the pending change. Uploads are not automatically retried.
+The ES mutations use `/account/tax-regime/es/...`; reads use `/account/tax-regime`.

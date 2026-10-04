@@ -10,7 +10,7 @@ module FiscalRail
 
     private
 
-    def request(operation_id, path: {}, params: {}, body: nil, retry_safe: false, idempotency_key: nil, headers: {}, binary: false)
+    def request(operation_id, path: {}, params: {}, body: nil, multipart: nil, retry_safe: false, idempotency_key: nil, headers: {}, binary: false)
       operation = Generated::OPERATIONS.fetch(operation_id)
       route = operation.fetch("path").gsub(/\{([^}]+)\}/) do
         value = path.fetch(Regexp.last_match(1).to_sym)
@@ -20,7 +20,7 @@ module FiscalRail
       end
       headers = headers.merge("Accept" => "application/pdf") if binary
       response = @transport.request(method: operation.fetch("method"), path: route, params: params,
-        body: body, retry_safe: retry_safe, idempotency_key: idempotency_key, headers: headers)
+        body: body, multipart: multipart, retry_safe: retry_safe, idempotency_key: idempotency_key, headers: headers)
       metadata = { request_id: response.headers["request-id"], idempotent_replayed: response.headers["idempotent-replayed"], idempotency_key: idempotency_key }
       unless operation.fetch("responses").key?(response.status.to_s)
         raise ResponseParseError.new("unexpected HTTP #{response.status}", model: operation_id, field: "$", **metadata.slice(:request_id, :idempotency_key))

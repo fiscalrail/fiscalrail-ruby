@@ -2365,6 +2365,49 @@ module FiscalRail
       ],
       "type": "object"
     },
+    "SpanishAccountSubmission": {
+      "model": "SpanishAccountSubmission",
+      "properties": {
+        "certificate_expires_at": {
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "error_code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "type": "string"
+        },
+        "last_checked_at": {
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ready": {
+          "type": "boolean"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "ready",
+        "certificate_expires_at",
+        "status",
+        "error_code",
+        "last_checked_at"
+      ],
+      "type": "object"
+    },
     "SpanishAccountTaxRegime": {
       "model": "SpanishAccountTaxRegime",
       "properties": {
@@ -2394,6 +2437,16 @@ module FiscalRail
     "SpanishAccountTaxRegimeDetails": {
       "model": "SpanishAccountTaxRegimeDetails",
       "properties": {
+        "pending_submission": {
+          "oneOf": [
+            {
+              "$ref": "#/components/schemas/SpanishPendingSubmission"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
         "representation": {
           "oneOf": [
             {
@@ -2403,10 +2456,22 @@ module FiscalRail
               "type": "null"
             }
           ]
+        },
+        "submission": {
+          "oneOf": [
+            {
+              "$ref": "#/components/schemas/SpanishAccountSubmission"
+            },
+            {
+              "type": "null"
+            }
+          ]
         }
       },
       "required": [
-        "representation"
+        "representation",
+        "submission",
+        "pending_submission"
       ],
       "type": "object"
     },
@@ -2457,6 +2522,89 @@ module FiscalRail
       "required": [
         "qr",
         "verifactu"
+      ],
+      "type": "object"
+    },
+    "SpanishPendingSubmission": {
+      "model": "SpanishPendingSubmission",
+      "properties": {
+        "certificate_expires_at": {
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "error_code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "kind": {
+          "type": "string"
+        },
+        "last_checked_at": {
+          "format": "date-time",
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "status",
+        "error_code",
+        "last_checked_at",
+        "certificate_expires_at"
+      ],
+      "type": "object"
+    },
+    "SubmissionConfigurationErrorResponse": {
+      "model": "SubmissionConfigurationErrorResponse",
+      "properties": {
+        "error": {
+          "model": "SubmissionConfigurationError",
+          "properties": {
+            "code": {
+              "type": "string"
+            },
+            "details": {
+              "items": {
+                "model": "SubmissionConfigurationValidationDetail",
+                "properties": {
+                  "field": {
+                    "type": "string"
+                  },
+                  "message": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "field",
+                  "message"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "message": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "code",
+            "message"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "error"
       ],
       "type": "object"
     },
@@ -2911,6 +3059,16 @@ module FiscalRail
       "responses": {
         "201": {
           "$ref": "#/components/schemas/InvoiceAmendment"
+        }
+      }
+    },
+    "cancelAccountSubmissionChange": {
+      "method": "DELETE",
+      "path": "/account/tax-regime/es/submission/pending",
+      "parameters": [],
+      "responses": {
+        "200": {
+          "$ref": "#/components/schemas/AccountTaxRegime"
         }
       }
     },
@@ -3585,6 +3743,36 @@ module FiscalRail
       "responses": {
         "200": {
           "$ref": "#/components/schemas/PaymentInstruction"
+        }
+      }
+    },
+    "uploadAccountCertificate": {
+      "method": "POST",
+      "path": "/account/tax-regime/es/certificate",
+      "parameters": [],
+      "responses": {
+        "202": {
+          "$ref": "#/components/schemas/AccountTaxRegime"
+        }
+      }
+    },
+    "verifyAccountRepresentation": {
+      "method": "POST",
+      "path": "/account/tax-regime/es/representation/verify",
+      "parameters": [],
+      "responses": {
+        "202": {
+          "$ref": "#/components/schemas/AccountTaxRegime"
+        }
+      }
+    },
+    "verifyAccountSubmission": {
+      "method": "POST",
+      "path": "/account/tax-regime/es/submission/verify",
+      "parameters": [],
+      "responses": {
+        "202": {
+          "$ref": "#/components/schemas/AccountTaxRegime"
         }
       }
     }
